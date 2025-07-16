@@ -1,0 +1,29 @@
+# Build and binary files
+*.exe
+*.obj
+*.o
+*.dll
+*.lib
+*.pdb
+*.idb
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.VC.db
+*.aps
+*.ncb
+*.sdf
+*.ipch
+*.tlog
+*.lastbuildstate
+*.opensdf
+*.cache
+*.log
+
+# Debug folders
+Debug/
+_UpgradeReport_Files/
+UpgradeLog.*
+Thumbs.db
