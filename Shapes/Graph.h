@@ -25,5 +25,8 @@ public:
 	void Save(ofstream& outfile);	//Save all shapes to a file
 	void load(ifstream& inputfile);	//Load all shapes from a file
 	void RemoveShape(shape* s);
+	void UnselectAll();
+	void SetSelectedShape(shape* pShape);
+	shape* GetSelectedShape() const;
 
 };

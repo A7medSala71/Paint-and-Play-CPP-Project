@@ -38,15 +38,26 @@ void opAddPol::Execute()
     // Prepare graphical info
     GfxInfo PolGfxInfo;
     PolGfxInfo.DrawClr = pUI->getCrntDrawColor();
-    PolGfxInfo.FillClr = pUI->getCrntFillColor();
     PolGfxInfo.BorderWdth = pUI->getCrntPenWidth();
-    PolGfxInfo.isFilled = false; // default
     PolGfxInfo.isSelected = false;
 
+    PolGfxInfo.isFilled = pUI->getIsFilled();
+    if (PolGfxInfo.isFilled)
+        PolGfxInfo.FillClr = pUI->getCrntFillColor();
     // Create shape and add it
     pPOL= new pol(numofvert, arr_x, arr_y, PolGfxInfo);
     Graph* pGr = pControl->getGraph();
     pGr->Addshape(pPOL);
+    
+    pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
+    string answer = pUI->GetSrting();
+
+    if (answer == "y" || answer == "Y") {
+        pUI->PrintMessage("Enter image path: ");
+        string path = pUI->GetSrting();
+        pPOL->setImagePath(path);
+        pUI->PrintMessage("Image successfully attached.");
+    }
 
     // Free temp arrays (they've been deep copied)
     delete[] arr_x;

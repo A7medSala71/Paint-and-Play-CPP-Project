@@ -20,6 +20,7 @@ GUI::GUI()
 	HighlightColor = MAGENTA;	//This color should NOT be used to draw shapes. use it for highlight only
 	StatusBarColor = LIGHTSEAGREEN;
 	PenWidth = 3;	//default width of the shapes frames
+	IsFilled = false;
 
 
 	//Create the output window
@@ -93,8 +94,9 @@ operationType GUI::GetUseroperation() const
 		case ICON_Pol: return Draw_Pol;
 		case ICON_Undo: return UNDO;
 		case ICON_Redo: return REDO;
-
-
+		case ICON_Select: return Select_Shape;
+		case ICON_ChngPenCol: return CHNG_DRAW_CLR;
+		case ICON_ChngFillCol: return CHNG_FILL_CLR;
 
 		case ICON_EXIT: return EXIT;
 
@@ -165,6 +167,9 @@ void GUI::CreateDrawToolBar()
 	MenuIconImages[ICON_Pol] = "images\\MenuIcons\\Menu_Pol.jpeg";
 	MenuIconImages[ICON_Undo] = "images\\MenuIcons\\Menu_Undo.jpeg";
 	MenuIconImages[ICON_Redo] = "images\\MenuIcons\\Menu_Redo.jpeg";
+	MenuIconImages[ICON_Select] = "images\\MenuIcons\\Menu_Select.jpeg";
+	MenuIconImages[ICON_ChngPenCol] = "images\\MenuIcons\\Menu_ChgPenCol.jpeg";
+	MenuIconImages[ICON_ChngFillCol] = "images\\MenuIcons\\Menu_Fill.jpeg";
 
 	MenuIconImages[ICON_EXIT] = "images\\MenuIcons\\Menu_Exit.jpg";
 
@@ -225,6 +230,42 @@ int GUI::getCrntPenWidth() const		//get current pen width
 	return PenWidth;
 }
 
+void GUI::SetCrntDrawColor(color c)
+{
+	DrawColor = c;
+}
+
+void GUI::SetCrntFillColor(color c)
+{
+	FillColor = c;
+}
+
+color GUI::getBGColor() const
+{
+	return BkGrndColor;
+}
+
+bool GUI::getIsFilled() const
+{
+	return IsFilled;
+}
+
+void GUI::enableFilling()
+{
+	IsFilled = true;
+}
+
+void GUI::disableFilling()
+{
+	IsFilled = false;
+}
+
+void GUI::setIsFilled(bool filled)
+{
+	IsFilled = filled;
+}
+
+
 //======================================================================================//
 //								shapes Drawing Functions								//
 //======================================================================================//
@@ -249,6 +290,11 @@ void GUI::DrawRect(Point P1, Point P2, GfxInfo RectGfxInfo) const
 		style = FRAME;
 
 	pWind->DrawRectangle(P1.x, P1.y, P2.x, P2.y, style);
+
+	if (RectGfxInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = RectGfxInfo.DrawClr;
 }
 
 void GUI::DrawLine(Point P1, Point P2, GfxInfo LineGfxInfo) const
@@ -262,6 +308,11 @@ void GUI::DrawLine(Point P1, Point P2, GfxInfo LineGfxInfo) const
 	pWind->SetPen(DrawingClr, LineGfxInfo.BorderWdth);	//Set Drawing color & width
 
 	pWind->DrawLine(P1.x, P1.y, P2.x, P2.y);
+
+	if (LineGfxInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = LineGfxInfo.DrawClr;
 }
 
 void GUI::DrawTri(Point P1, Point P2, Point P3, GfxInfo TriGfxInfo) const
@@ -284,6 +335,12 @@ void GUI::DrawTri(Point P1, Point P2, Point P3, GfxInfo TriGfxInfo) const
 		style = FRAME;
 
 	pWind->DrawTriangle(P1.x, P1.y, P2.x, P2.y, P3.x, P3.y, style);
+
+
+	if (TriGfxInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = TriGfxInfo.DrawClr;
 }
 
 void GUI::DrawSquare(Point center, int length, GfxInfo SquareGfxInfo) const
@@ -309,6 +366,11 @@ void GUI::DrawSquare(Point center, int length, GfxInfo SquareGfxInfo) const
 
 	pWind->DrawRectangle(P1.x, P1.y, P2.x, P2.y, style);
 
+	if (SquareGfxInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = SquareGfxInfo.DrawClr;
+
 }
 void GUI::DrawCircle(Point center, int radius, GfxInfo CircleInfo) const
 {
@@ -329,6 +391,11 @@ void GUI::DrawCircle(Point center, int radius, GfxInfo CircleInfo) const
 	else
 		style = FRAME;
 	pWind->DrawCircle(center.x,center.y,radius, style);
+
+	if (CircleInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = CircleInfo.DrawClr;
 }
 void GUI::DrawOval(Point center, int Horizontal_diam, int Vert_diam, GfxInfo OvalInfo) const
 {
@@ -352,6 +419,12 @@ void GUI::DrawOval(Point center, int Horizontal_diam, int Vert_diam, GfxInfo Ova
 	Point P2 = { center.x + Horizontal_diam / 2, center.y + Vert_diam / 2 };
 
 	pWind->DrawEllipse(P1.x, P1.y, P2.x, P2.y, style);
+
+
+	if (OvalInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = OvalInfo.DrawClr;
 }
 void GUI::DrawPol(int numofvert, int* arr_x, int*arr_y, GfxInfo PolInfo) const
 {
@@ -373,6 +446,11 @@ void GUI::DrawPol(int numofvert, int* arr_x, int*arr_y, GfxInfo PolInfo) const
 		style = FRAME;
 
 	pWind->DrawPolygon(arr_x,arr_y,numofvert,style);
+
+	if (PolInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = PolInfo.DrawClr;
 }
 void GUI::DrawRegPol(int numofvert, int* arr_x, int* arr_y, GfxInfo RegPolInfo) const
 {
@@ -394,6 +472,11 @@ void GUI::DrawRegPol(int numofvert, int* arr_x, int* arr_y, GfxInfo RegPolInfo) 
 		style = FRAME;
 
 	pWind->DrawPolygon(arr_x, arr_y, numofvert, style);
+
+	if (RegPolInfo.isSelected)
+		DrawingClr = HighlightColor;
+	else
+		DrawingClr = RegPolInfo.DrawClr;
 	
 }
 //////////////////////////////////////////////////////////////////////////////////////////

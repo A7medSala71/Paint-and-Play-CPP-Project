@@ -1,4 +1,5 @@
 #include "Rect.h"
+#include"../GUI/GUI.h"
 
 Rect::Rect(Point P1, Point P2, GfxInfo shapeGfxInfo):shape(shapeGfxInfo)
 {
@@ -23,4 +24,20 @@ void Rect::Draw(GUI* pUI) const
 
         pUI->GetWindow()->DrawImage(img_path, x1, y1, width, height);
     }
+}
+
+string Rect::GetInfo() const
+{
+    return "Rectangle from (" + to_string(Corner1.x) + ", " + to_string(Corner1.y) +
+        ") to (" + to_string(Corner2.x) + ", " + to_string(Corner2.y) + ")";
+}
+
+Point Rect::getCorner1() const
+{
+    return Corner1;
+}
+
+Point Rect::getCorner2() const
+{
+    return Corner2;
 }

@@ -19,3 +19,19 @@ void Circle::Draw(GUI* pUI) const
 	}
 
 }
+
+string Circle::GetInfo() const
+{
+	return "Circle centered at (" + to_string(center.x) + ", " + to_string(center.y) +
+		") with radius " + to_string(radius);
+}
+
+Point Circle::getcenter() const
+{
+	return center;
+}
+
+int Circle::getrad() const
+{
+	return radius;
+}

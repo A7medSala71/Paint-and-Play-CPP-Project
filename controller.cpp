@@ -1,12 +1,15 @@
 #include "controller.h"
 #include "operations\opAddRect.h"
 #include "operations/OpAddLine.h"
-#include "operations/opAddTri.h"
+#include"opAddTri.h"
 #include"operations/opAddSqr.h"
 #include"operations/opAddCircle.h"
 #include"operations/opAddOval.h"
 #include"operations/opAddPol.h"
 #include"operations/opAddRegPol.h"
+#include"operations/opSelect.h"
+#include"opChangePenColor.h"
+#include"opChangeFillCol.h"
 
 
 //Constructor
@@ -57,6 +60,15 @@ operation* controller::createOperation(operationType OpType)
 			break;
 		case Draw_RegPol:
 			pOp = new opAddRegPol(this);
+			break;
+		case Select_Shape:
+			pOp = new opSelect(this);
+			break;
+		case CHNG_DRAW_CLR:
+			pOp = new opChangePenColor(this);
+			break;
+		case CHNG_FILL_CLR:
+			pOp = new opChangeFillCol(this);
 			break;
 
 		case EXIT:

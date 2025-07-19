@@ -1,7 +1,7 @@
 #pragma once
-#include"operation.h"
-#include"../Shapes/Tri.h"
-class opAddTri:public operation
+#include"operations/operation.h"
+#include"Shapes/Tri.h"
+class opAddTri :public operation
 {
 private:
 	Tri* pTRI;

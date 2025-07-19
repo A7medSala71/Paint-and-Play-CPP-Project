@@ -9,5 +9,9 @@ public:
 	Square(Point p1, int length, GfxInfo shapeGfxInfo);
 	virtual ~Square();
 	virtual void Draw(GUI* pUI) const;
+	virtual string GetInfo() const;
+	virtual Point GetCenter() const;
+	virtual int GetSlength() const;
+
 };
 

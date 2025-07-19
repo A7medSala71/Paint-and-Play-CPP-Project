@@ -26,8 +26,11 @@ void OpAddLine::Execute()
 	GfxInfo LinefxInfo;
 	LinefxInfo.DrawClr = pUI->getCrntDrawColor();
 	LinefxInfo.BorderWdth = pUI->getCrntPenWidth();
-	LinefxInfo.isFilled = false;
 	LinefxInfo.isSelected = false;
+
+	LinefxInfo.isFilled = pUI->getIsFilled();
+	if (LinefxInfo.isFilled)
+		LinefxInfo.FillClr = pUI->getCrntFillColor();
 
 	pLine = new Line(P1, P2, LinefxInfo);
 	Graph* pGr = pControl->getGraph();

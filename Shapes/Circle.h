@@ -10,5 +10,9 @@ public:
 	Circle(Point c, int r, GfxInfo circleInfo);
 	virtual ~Circle();
 	virtual void Draw(GUI* pUI) const;
+	virtual string GetInfo() const;
+	virtual Point getcenter()const;
+	virtual int getrad()const;
+
 };
 

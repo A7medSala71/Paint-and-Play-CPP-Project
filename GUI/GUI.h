@@ -41,7 +41,9 @@ class GUI
 		ICON_Pol,
 		ICON_Undo,
 		ICON_Redo,
-
+		ICON_Select,
+		ICON_ChngPenCol,
+		ICON_ChngFillCol,
 
 
 
@@ -70,7 +72,7 @@ class GUI
 	color BkGrndColor;		//Background color
 	color StatusBarColor;	//Status bar color
 	int PenWidth;			//width of the pen that draws shapes
-
+	bool IsFilled;
 	/// Add more members if needed
 
 
@@ -118,6 +120,17 @@ public:
 	color getCrntDrawColor() const;	//get current drwawing color
 	color getCrntFillColor() const;	//get current filling color
 	int getCrntPenWidth() const;		//get current pen width
+	void SetCrntDrawColor(color c);
+	void SetCrntFillColor(color c);
+	color getBGColor() const;
+
+	bool getIsFilled() const;
+
+	void enableFilling();
+
+	void disableFilling();
+
+	void setIsFilled(bool filled);
 
 
 	~GUI();

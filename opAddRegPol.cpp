@@ -38,15 +38,25 @@ void opAddRegPol::Execute()
     // Prepare graphical info
     GfxInfo RegPolGfxInfo;
     RegPolGfxInfo.DrawClr = pUI->getCrntDrawColor();
-    RegPolGfxInfo.FillClr = pUI->getCrntFillColor();
     RegPolGfxInfo.BorderWdth = pUI->getCrntPenWidth();
-    RegPolGfxInfo.isFilled = false; // default
     RegPolGfxInfo.isSelected = false;
 
+    RegPolGfxInfo.isFilled = pUI->getIsFilled();
+    if (RegPolGfxInfo.isFilled)
+        RegPolGfxInfo.FillClr = pUI->getCrntFillColor();
     // Create shape and add it
     pRPol = new RegPol(center, RadPT, numofsides, RegPolGfxInfo);
     Graph* pGr = pControl->getGraph();
     pGr->Addshape(pRPol);
+    pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
+    string answer = pUI->GetSrting();
+
+    if (answer == "y" || answer == "Y") {
+        pUI->PrintMessage("Enter image path: ");
+        string path = pUI->GetSrting();
+        pRPol->setImagePath(path);
+        pUI->PrintMessage("Image successfully attached.");
+    }
 }
 
 void opAddRegPol::Undo()
