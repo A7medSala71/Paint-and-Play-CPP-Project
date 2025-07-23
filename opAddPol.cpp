@@ -48,16 +48,6 @@ void opAddPol::Execute()
     pPOL= new pol(numofvert, arr_x, arr_y, PolGfxInfo);
     Graph* pGr = pControl->getGraph();
     pGr->Addshape(pPOL);
-    
-    pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
-    string answer = pUI->GetSrting();
-
-    if (answer == "y" || answer == "Y") {
-        pUI->PrintMessage("Enter image path: ");
-        string path = pUI->GetSrting();
-        pPOL->setImagePath(path);
-        pUI->PrintMessage("Image successfully attached.");
-    }
 
     // Free temp arrays (they've been deep copied)
     delete[] arr_x;

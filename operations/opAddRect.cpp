@@ -57,16 +57,6 @@ void opAddRect::Execute()
 	//Add the rectangle to the list of shapes
 	pGr->Addshape(pRect);
 
-	pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
-	string answer = pUI->GetSrting();
-
-	if (answer == "y" || answer == "Y") {
-		pUI->PrintMessage("Enter image path: ");
-		string path = pUI->GetSrting();
-		pRect->setImagePath(path);
-		pUI->PrintMessage("Image successfully attached.");
-	}
-
 }
 
 void opAddRect::Undo()

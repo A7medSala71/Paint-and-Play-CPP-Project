@@ -12,13 +12,20 @@ Square::~Square()
 
 void Square::Draw(GUI* pUI) const
 {
-	pUI->DrawSquare(Center,SideLength,ShpGfxInfo);
-	if (!img_path.empty()) {
-		int x = Center.x - SideLength / 2;
-		int y = Center.y - SideLength / 2;
+    pUI->DrawSquare(Center, SideLength, ShpGfxInfo);
+    if (!img_path.empty()) {
+        float factor = 0.4f;
+        int minx = Center.x - SideLength / 2;
+        int miny = Center.y - SideLength / 2;
+        int w = SideLength;
+        int h = SideLength;
+        int imgW = w * factor;
+        int imgH = h * factor;
+        int offsetX = minx + (w - imgW) / 2;
+        int offsetY = miny + (h - imgH) / 2;
 
-		pUI->GetWindow()->DrawImage(img_path, x, y, SideLength*0.90, SideLength*0.90);
-	}
+        pUI->GetWindow()->DrawImage(img_path, offsetX, offsetY, imgW, imgH);
+    }
 }
 
 string Square::GetInfo() const

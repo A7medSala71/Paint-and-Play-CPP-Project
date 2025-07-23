@@ -14,7 +14,6 @@ public:
 	virtual Point GetPoint1() const;
 	virtual Point GetPoint2() const;
 	virtual Point GetPoint3() const;
-
 };
 
 double dist(const Point& p1, const Point& p2);

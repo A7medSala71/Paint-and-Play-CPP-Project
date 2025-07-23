@@ -178,10 +178,13 @@
     <ClCompile Include="opChangePenColor.cpp" />
     <ClCompile Include="operations\opAddCircle.cpp" />
     <ClCompile Include="operations\opAddRect.cpp" />
+    <ClCompile Include="operations\opColorPalette.cpp" />
     <ClCompile Include="opSelect.cpp" />
+    <ClCompile Include="opStickImage.cpp" />
     <ClCompile Include="Oval.cpp" />
     <ClCompile Include="pol.cpp" />
     <ClCompile Include="RegPol.cpp" />
+    <ClCompile Include="Shapes\ColorPalette.cpp" />
     <ClCompile Include="Shapes\Graph.cpp" />
     <ClCompile Include="Shapes\Shape.cpp" />
     <ClCompile Include="Shapes\Rect.cpp" />
@@ -222,10 +225,13 @@
     <ClInclude Include="operations\opAddPol.h" />
     <ClInclude Include="operations\opAddRegPol.h" />
     <ClInclude Include="operations\opAddSqr.h" />
+    <ClInclude Include="operations\opColorPalette.h" />
     <ClInclude Include="operations\operation.h" />
     <ClInclude Include="operations\opSelect.h" />
+    <ClInclude Include="opStickImage.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shapes\Circle.h" />
+    <ClInclude Include="Shapes\ColorPalette.h" />
     <ClInclude Include="Shapes\Graph.h" />
     <ClInclude Include="Shapes\Line.h" />
     <ClInclude Include="Shapes\Oval.h" />

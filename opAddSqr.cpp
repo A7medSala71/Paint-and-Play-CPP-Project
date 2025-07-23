@@ -46,16 +46,6 @@ void opAddSqr::Execute()
 	Graph* pGr = pControl->getGraph();
 
 	pGr->Addshape(pSqr);
-
-	pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
-	string answer = pUI->GetSrting();
-
-	if (answer == "y" || answer == "Y") {
-		pUI->PrintMessage("Enter image path: ");
-		string path = pUI->GetSrting();
-		pSqr->setImagePath(path);
-		pUI->PrintMessage("Image successfully attached.");
-	}
 }
 
 void opAddSqr::Undo()

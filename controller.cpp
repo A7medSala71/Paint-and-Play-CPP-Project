@@ -10,6 +10,8 @@
 #include"operations/opSelect.h"
 #include"opChangePenColor.h"
 #include"opChangeFillCol.h"
+#include"opStickImage.h"
+#include"operations/opColorPalette.h"
 
 
 //Constructor
@@ -69,6 +71,12 @@ operation* controller::createOperation(operationType OpType)
 			break;
 		case CHNG_FILL_CLR:
 			pOp = new opChangeFillCol(this);
+			break;
+		case STICK_IMG:
+			pOp = new opStickImage(this);
+			break;
+		case Palette:
+			pOp = new opColorPalette(this);
 			break;
 
 		case EXIT:

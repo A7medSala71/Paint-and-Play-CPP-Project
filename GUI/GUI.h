@@ -44,6 +44,8 @@ class GUI
 		ICON_Select,
 		ICON_ChngPenCol,
 		ICON_ChngFillCol,
+		ICON_StickIMG,
+		ICON_ColorPalet,
 
 
 

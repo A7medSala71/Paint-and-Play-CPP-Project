@@ -30,17 +30,27 @@ RegPol::~RegPol()
 void RegPol::Draw(GUI* pUI) const
 {
     pUI->DrawRegPol(numofvertices, array_x, array_y, ShpGfxInfo);
-    if (!img_path.empty())
-    {
-        int minX = *min_element(array_x, array_x + numofvertices);
-        int maxX = *max_element(array_x, array_x + numofvertices);
-        int minY = *min_element(array_y, array_y + numofvertices);
-        int maxY = *max_element(array_y, array_y + numofvertices);
+    if (!img_path.empty()) {
+        float factor = 0.4f;
 
-        int paddingX = (maxX - minX) * 0.15;
-        int paddingY = (maxY - minY) * 0.15;
+        int minx = array_x[0], maxx = array_x[0];
+        int miny = array_y[0], maxy = array_y[0];
 
-        pUI->GetWindow()->DrawImage(img_path, minX+ paddingX, minY+ paddingY, (maxX - minX)-(2*paddingX), (maxY - minY)-(2*paddingY));
+        for (int i = 1; i < numofvertices; i++) {
+            minx = min(minx, array_x[i]);
+            maxx = max(maxx, array_x[i]);
+            miny = min(miny, array_y[i]);
+            maxy = max(maxy, array_y[i]);
+        }
+
+        int w = maxx - minx;
+        int h = maxy - miny;
+        int imgW = w * factor;
+        int imgH = h * factor;
+        int offsetX = minx + (w - imgW) / 2;
+        int offsetY = miny + (h - imgH) / 2;
+
+        pUI->GetWindow()->DrawImage(img_path, offsetX, offsetY, imgW, imgH);
     }
 
 }

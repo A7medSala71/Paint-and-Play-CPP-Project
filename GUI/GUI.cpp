@@ -14,7 +14,7 @@ GUI::GUI()
 	MenuIconWidth = 80;
 
 	DrawColor = DARKGREEN;	//default Drawing color
-	FillColor = YELLOW;	//default Filling color
+	FillColor = WHITE;	//default Filling color
 	MsgColor = BLUE;		//Messages color
 	BkGrndColor = WHITE;	//Background color
 	HighlightColor = MAGENTA;	//This color should NOT be used to draw shapes. use it for highlight only
@@ -97,6 +97,8 @@ operationType GUI::GetUseroperation() const
 		case ICON_Select: return Select_Shape;
 		case ICON_ChngPenCol: return CHNG_DRAW_CLR;
 		case ICON_ChngFillCol: return CHNG_FILL_CLR;
+		case ICON_StickIMG: return STICK_IMG;
+		case ICON_ColorPalet: return Palette;
 
 		case ICON_EXIT: return EXIT;
 
@@ -170,6 +172,9 @@ void GUI::CreateDrawToolBar()
 	MenuIconImages[ICON_Select] = "images\\MenuIcons\\Menu_Select.jpeg";
 	MenuIconImages[ICON_ChngPenCol] = "images\\MenuIcons\\Menu_ChgPenCol.jpeg";
 	MenuIconImages[ICON_ChngFillCol] = "images\\MenuIcons\\Menu_Fill.jpeg";
+	MenuIconImages[ICON_StickIMG] = "images\\MenuIcons\\Menu_StickIMG.jpeg";
+	MenuIconImages[ICON_ColorPalet] = "images\\MenuIcons\\Menu_ColPalet.jpeg";
+
 
 	MenuIconImages[ICON_EXIT] = "images\\MenuIcons\\Menu_Exit.jpg";
 
