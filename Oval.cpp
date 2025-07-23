@@ -15,12 +15,19 @@ void Oval::Draw(GUI* pUI) const
 	pUI->DrawOval(Center, Horizonatl_diam, Vertical_diam, ShpGfxInfo);
 
 
-	if (!img_path.empty()) {
-		int x = Center.x - Horizonatl_diam / 2;
-		int y = Center.y - Horizonatl_diam / 2;
+    if (!img_path.empty()) {
+        float factor = 0.4f; // Adjust factor if needed
+        int minx = Center.x - Horizonatl_diam / 2;
+        int miny = Center.y - Vertical_diam / 2;
+        int w = Horizonatl_diam;
+        int h = Vertical_diam;
+        int imgW = w * factor;
+        int imgH = h * factor;
+        int offsetX = minx + (w - imgW) / 2;
+        int offsetY = miny + (h - imgH) / 2;
 
-		pUI->GetWindow()->DrawImage(img_path, x, y, Horizonatl_diam*0.8, Vertical_diam*0.8);
-	}
+        pUI->GetWindow()->DrawImage(img_path, offsetX, offsetY, imgW, imgH);
+    }
 
 }
 

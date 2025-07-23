@@ -48,16 +48,6 @@ void opAddCircle::Execute()
 	Graph* pGr = pControl->getGraph();
 
 	pGr->Addshape(pCirc);
-
-	pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
-	string answer = pUI->GetSrting();
-
-	if (answer == "y" || answer == "Y") {
-		pUI->PrintMessage("Enter image path: ");
-		string path = pUI->GetSrting();
-		pCirc->setImagePath(path);
-		pUI->PrintMessage("Image successfully attached.");
-	}
 }
 
 void opAddCircle::Undo()

@@ -21,15 +21,18 @@ void Tri::Draw(GUI* pUI) const
 	pUI->DrawTri(P1, P2,  P3, ShpGfxInfo);
 
 	if (!img_path.empty()) {
-		int minx = min( P1.x, min(P2.x,P3.x) );
+		float factor = 0.4f;
+		int minx = min( P1.x, min(P2.x,P3.x));
 		int miny = min(P1.y, min(P2.y,P3.y));
 		int Maxx = max(P1.x, max(P2.x,P3.x));
 		int MaxY= max(P1.y, max(P2.y,P3.y));
-
-		int paddingX = (Maxx - minx) * 0.15;
-		int paddingY = (MaxY - miny) * 0.15;
-
-		pUI->GetWindow()->DrawImage(img_path, minx+paddingX, miny+paddingY, (Maxx-minx)-2*paddingX, (MaxY-miny)-2*paddingY);
+		int w = (Maxx - minx);
+		int h = (MaxY - miny);
+		int imgW = w * factor;
+		int imgH = h * factor;
+		int offsetX = minx + (w - imgW) / 2;
+		int offsetY = miny + (h - imgH) / 2;
+		pUI->GetWindow()->DrawImage(img_path, offsetX, offsetY, imgW, imgH);
 	}
 
 }

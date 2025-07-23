@@ -1,6 +1,7 @@
 #include "Rect.h"
 #include"../GUI/GUI.h"
-
+#include<iostream>
+using namespace std;
 Rect::Rect(Point P1, Point P2, GfxInfo shapeGfxInfo):shape(shapeGfxInfo)
 {
 	Corner1 = P1;
@@ -15,14 +16,20 @@ void Rect::Draw(GUI* pUI) const
 	//Call Output::DrawRect to draw a rectangle on the screen	
 	pUI->DrawRect(Corner1, Corner2, ShpGfxInfo);
     if (!img_path.empty()) {
-        int x1 = min(Corner1.x, Corner2.x);
-        int y1 = min(Corner1.y, Corner2.y);
-        int x2 = max(Corner1.x, Corner2.x);
-        int y2 = max(Corner1.y, Corner2.y);
-        int width = x2 - x1;
-        int height = y2 - y1;
+        float factor = 0.4f;
+        int minx = min(Corner1.x, Corner2.x);
+        int miny = min(Corner1.y, Corner2.y);
+        int maxx = max(Corner1.x, Corner2.x);
+        int maxy = max(Corner1.y, Corner2.y);
 
-        pUI->GetWindow()->DrawImage(img_path, x1, y1, width, height);
+        int w = maxx - minx;
+        int h = maxy - miny;
+        int imgW = w * factor;
+        int imgH = h * factor;
+        int offsetX = minx + (w - imgW) / 2;
+        int offsetY = miny + (h - imgH) / 2;
+
+        pUI->GetWindow()->DrawImage(img_path, offsetX, offsetY, imgW, imgH);
     }
 }
 

@@ -48,15 +48,6 @@ void opAddRegPol::Execute()
     pRPol = new RegPol(center, RadPT, numofsides, RegPolGfxInfo);
     Graph* pGr = pControl->getGraph();
     pGr->Addshape(pRPol);
-    pUI->PrintMessage("Do you want to stick an image to this shape? (y/n)");
-    string answer = pUI->GetSrting();
-
-    if (answer == "y" || answer == "Y") {
-        pUI->PrintMessage("Enter image path: ");
-        string path = pUI->GetSrting();
-        pRPol->setImagePath(path);
-        pUI->PrintMessage("Image successfully attached.");
-    }
 }
 
 void opAddRegPol::Undo()
