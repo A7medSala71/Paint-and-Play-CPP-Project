@@ -81,7 +81,6 @@ operation* controller::createOperation(operationType OpType)
 
 		case EXIT:
 			///create Exitoperation here
-			
 			break;
 		
 		case STATUS:	//a click on the status bar ==> no operation
@@ -174,7 +173,6 @@ void controller::Run()
 
 				// Clear Redo stack (no longer valid)
 				while (!Redo_Stack.empty()) {
-					delete Redo_Stack.top();
 					Redo_Stack.pop();
 				}
 			}

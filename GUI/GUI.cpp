@@ -424,6 +424,7 @@ void GUI::DrawOval(Point center, int Horizontal_diam, int Vert_diam, GfxInfo Ova
 	Point P2 = { center.x + Horizontal_diam / 2, center.y + Vert_diam / 2 };
 
 	pWind->DrawEllipse(P1.x, P1.y, P2.x, P2.y, style);
+	
 
 
 	if (OvalInfo.isSelected)

@@ -26,7 +26,7 @@ void OpAddLine::Execute()
 	GfxInfo LinefxInfo;
 	LinefxInfo.DrawClr = pUI->getCrntDrawColor();
 	LinefxInfo.BorderWdth = pUI->getCrntPenWidth();
-	LinefxInfo.isSelected = false;
+	LinefxInfo.isSelected = false; //by default
 
 	LinefxInfo.isFilled = pUI->getIsFilled();
 	if (LinefxInfo.isFilled)

@@ -12,7 +12,6 @@ class operation; //forward declaration
 //Main class that manages everything in the application.
 class controller
 {
-
 	Graph* pGraph;	//pointe to the grapg
 	GUI* pGUI;		//Pointer to UI class
 	stack<operation*> Undo_Stack;
