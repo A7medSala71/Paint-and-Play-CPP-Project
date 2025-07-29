@@ -1,4 +1,5 @@
 #include "Square.h"
+#include<fstream>
 
 Square::Square( Point p1, int length, GfxInfo shapeGfxInfo) :shape(shapeGfxInfo)
 {
@@ -44,3 +45,45 @@ int Square::GetSlength() const
 	return SideLength;
 }
 
+void Square::Resize(double factor)
+{
+    SideLength = (int)(SideLength * factor);
+}
+
+void Square::Rotate()
+{
+}
+
+shape* Square::Clone() const
+{
+    return new Square(*this);
+}
+
+void Square::Move(Point p)
+{
+    Center = p;
+}
+void Square::Zoom(double factor, Point ref)
+{
+    Center.x = ref.x + (int)((Center.x - ref.x) * factor);
+    Center.y = ref.y + (int)((Center.y - ref.y) * factor);
+    SideLength = (int)(SideLength * factor);
+}
+void Square::Save(ofstream& OutFile)
+{
+    OutFile << "SQUARE " << getID() << " "
+        << Center.x << " " << Center.y << " "
+        << SideLength << " "
+        << (int)ShpGfxInfo.DrawClr.ucRed << " "
+        << (int)ShpGfxInfo.DrawClr.ucGreen << " "
+        << (int)ShpGfxInfo.DrawClr.ucBlue << " ";
+
+    if (ShpGfxInfo.isFilled)
+        OutFile << (int)ShpGfxInfo.FillClr.ucRed << " "
+        << (int)ShpGfxInfo.FillClr.ucGreen << " "
+        << (int)ShpGfxInfo.FillClr.ucBlue << " ";
+    else
+        OutFile << "NO_FILL ";
+
+    OutFile << ShpGfxInfo.BorderWdth << "\n";
+}

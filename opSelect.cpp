@@ -19,26 +19,35 @@ void opSelect::Execute()
     Graph* pGraph = pControl->getGraph();
 
     int x, y;
-    pUI->PrintMessage("Click on a shape to select or click empty space to unselect all.");
+    pUI->PrintMessage("Click on a shape to select or empty space to unselect all.");
     pUI->GetPointClicked(x, y);
 
-    shape* selected = pGraph->Getshape(x, y);
+    // Store previous selection for undo
+    oldSelection = pGraph->GetSelectedShape();
 
-    oldSelection = pGraph->GetSelectedShape();        // Save current selection
-    newSelection = pGraph->Getshape(x, y);            // Try selecting new shape
-    pGraph->SetSelectedShape(newSelection);           // Update selection in Graph
-    if (selected) {
+    // Find shape under click
+    shape* clickedShape = pGraph->Getshape(x, y);
+
+    if (clickedShape) {
+        // Deselect all others
         pGraph->UnselectAll();
-        selected->SetSelected(true);
 
-        // Display shape info
-        string info = selected->GetInfo();
+        // Select clicked shape
+        pGraph->SetSelectedShape(clickedShape);
+
+        // Display info
+        string info = clickedShape->GetInfo();
         pUI->PrintMessage("Selected: " + info);
     }
     else {
+        // Clicked empty area ? clear selection
         pGraph->UnselectAll();
+        pGraph->SetSelectedShape(nullptr);
         pUI->PrintMessage("No shape selected.");
     }
+
+    // Save new selection for redo
+    newSelection = clickedShape;
 
     pControl->UpdateInterface();
 }

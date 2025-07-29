@@ -9,10 +9,12 @@
 #include"RegPol.h"
 #include"Oval.h"
 #include"pol.h"
+#include<fstream>
 Graph::Graph()
 {
 	shapeCount = 0;
 	selectedShape = nullptr;
+	nextID = 1;
 }
 
 Graph::~Graph()
@@ -27,8 +29,11 @@ Graph::~Graph()
 void Graph::Addshape(shape* pShp)
 {
 	//Add a new shape to the shapes list
-	if(shapeCount<maxShapeCount)
+	if (shapeCount < maxShapeCount) {
+		pShp->setID(nextID++);   // <--- Assign unique ID automatically
 		shapesList[shapeCount++] = pShp;
+
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////
 //Draw all shapes on the user interface
@@ -50,6 +55,7 @@ shape* Graph::Getshape(int x, int y) const
 		Circle* circ = dynamic_cast<Circle*>(shapesList[i]);
 		if (circ)
 		{
+			
 			Point c = circ->getcenter();
 			int rad = circ->getrad();
 			int dx = x - c.x;
@@ -177,10 +183,258 @@ shape* Graph::Getshape(int x, int y) const
 			}
 		}
 
-
 	}
 
 	return nullptr;
+}
+
+
+void Graph::SaveShapes(std::ofstream& outFile, GUI* pGUI)
+{
+	// Save current draw color, fill color, pen width
+	color draw = pGUI->getCrntDrawColor();
+	color fill = pGUI->getCrntFillColor();
+	int penWidth = pGUI->getCrntPenWidth();
+
+	outFile << (int)draw.ucRed << " "
+		<< (int)draw.ucGreen << " "
+		<< (int)draw.ucBlue << "\t"
+		<< (int)fill.ucRed << " "
+		<< (int)fill.ucGreen << " "
+		<< (int)fill.ucBlue << "\t"
+		<< penWidth << "\n";
+
+	// Save number of shapes
+	outFile << shapeCount << "\n";
+
+	// Save all shapes
+	for (int i = 0; i < shapeCount; i++)
+		shapesList[i]->Save(outFile);
+}
+
+void Graph::LoadShapes(ifstream& inFile, GUI* pUI)
+{
+	// Clear existing shapes
+	shapeCount = 0;
+	selectedShape = nullptr;
+	selectedShapes.clear();
+
+	int drawR, drawG, drawB;
+	int fillR, fillG, fillB;
+	int penWidth;
+
+	// Read default drawing colors & pen width
+	inFile >> drawR >> drawG >> drawB >> fillR >> fillG >> fillB >> penWidth;
+	color defaultDraw = { (unsigned char)drawR, (unsigned char)drawG, (unsigned char)drawB };
+	color defaultFill = { (unsigned char)fillR, (unsigned char)fillG, (unsigned char)fillB };
+
+	// Read number of shapes
+	int numShapes;
+	inFile >> numShapes;
+
+	for (int i = 0; i < numShapes; i++)
+	{
+		string type;
+		int id;
+		inFile >> type >> id;
+
+		// -------------------- RECT --------------------
+		if (type == "RECT") {
+			int x1, y1, x2, y2, r, g, b, penW;
+			string fillToken;
+			inFile >> x1 >> y1 >> x2 >> y2 >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			Rect* rect = new Rect({ x1, y1 }, { x2, y2 }, gfx);
+			rect->setID(id);
+			Addshape(rect);
+		}
+
+		// -------------------- CIRCLE --------------------
+		else if (type == "CIRCLE") {
+			int cx, cy, radius, r, g, b, penW;
+			string fillToken;
+			inFile >> cx >> cy >> radius >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			Circle* circle = new Circle({ cx, cy }, radius, gfx);
+			circle->setID(id);
+			Addshape(circle);
+		}
+
+		// -------------------- TRIANGLE --------------------
+		else if (type == "TRIANGLE") {
+			int x1, y1, x2, y2, x3, y3, r, g, b, penW;
+			string fillToken;
+			inFile >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			Tri* tri = new Tri({ x1, y1 }, { x2, y2 }, { x3, y3 }, gfx);
+			tri->setID(id);
+			Addshape(tri);
+		}
+
+		// -------------------- LINE --------------------
+		else if (type == "LINE") {
+			int x1, y1, x2, y2, r, g, b, penW;
+			inFile >> x1 >> y1 >> x2 >> y2 >> r >> g >> b >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			Line* line = new Line({ x1, y1 }, { x2, y2 }, gfx);
+			line->setID(id);
+			Addshape(line);
+		}
+
+		// -------------------- SQUARE --------------------
+		else if (type == "SQUARE") {
+			int cx, cy, sideLength, r, g, b, penW;
+			string fillToken;
+			inFile >> cx >> cy >> sideLength >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			Square* sq = new Square({ cx, cy }, sideLength, gfx);
+			sq->setID(id);
+			Addshape(sq);
+		}
+
+		// -------------------- REGPOL --------------------
+		else if (type == "REGPOL") {
+			int cx, cy, numVertices, r, g, b, penW;
+			double radius;
+			string fillToken;
+			inFile >> cx >> cy >> radius >> numVertices >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			// pick a point on the circle to compute radius & orientation
+			Point radPT = { (int)(cx + radius), cy };
+
+			RegPol* rp = new RegPol({ cx, cy }, radPT, numVertices, gfx);
+			rp->setID(id);
+			Addshape(rp);
+			}
+
+		// -------------------- POLY --------------------
+		else if (type == "POLY") {
+			int vertexCount, r, g, b, penW;
+			inFile >> vertexCount;
+
+			int* x = new int[vertexCount];
+			int* y = new int[vertexCount];
+			for (int j = 0; j < vertexCount; j++)
+				inFile >> x[j] >> y[j];
+
+			string fillToken;
+			inFile >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			pol* polygon = new pol(vertexCount, x, y, gfx);
+			polygon->setID(id);
+			Addshape(polygon);
+
+			delete[] x;
+			delete[] y;
+		}
+
+		// -------------------- OVAL --------------------
+		else if (type == "OVAL") {
+			int cx, cy, horiz, vert, r, g, b, penW;
+			string fillToken;
+			inFile >> cx >> cy >> horiz >> vert >> r >> g >> b >> fillToken >> penW;
+
+			GfxInfo gfx;
+			gfx.DrawClr = { (unsigned char)r, (unsigned char)g, (unsigned char)b };
+			gfx.BorderWdth = penW;
+			gfx.isFilled = false;
+
+			if (fillToken != "NO_FILL") {
+				int fr = stoi(fillToken);
+				int fg, fb;
+				inFile >> fg >> fb;
+				gfx.isFilled = true;
+				gfx.FillClr = { (unsigned char)fr, (unsigned char)fg, (unsigned char)fb };
+			}
+
+			Oval* oval = new Oval({ cx, cy }, horiz, vert, gfx);
+			oval->setID(id);
+			Addshape(oval);
+		}
+	}
 }
 
 void Graph::RemoveShape(shape* s)
@@ -220,4 +474,83 @@ void Graph::SetSelectedShape(shape* pShape)
 shape* Graph::GetSelectedShape() const
 {
 	return selectedShape;
+}
+
+int Graph::GetShapeIndex(shape* s) const
+{
+	for (int i = 0; i < shapeCount; i++)
+		if (shapesList[i] == s)
+			return i;
+	return -1;
+}
+
+void Graph::InsertShapeAt(shape* s, int index)
+{
+	if (shapeCount >= maxShapeCount) return;
+
+	if (index < 0 || index > shapeCount)
+		index = shapeCount;  // fallback to end
+
+	for (int i = shapeCount; i > index; i--)
+		shapesList[i] = shapesList[i - 1];
+
+	shapesList[index] = s;
+	shapeCount++;
+}
+
+void Graph::Zoom(double factor, Point ref)
+{
+	for (int i = 0; i < shapeCount; i++)
+		shapesList[i]->Zoom(factor, ref);
+}
+void Graph::AddToSelection(shape* s)
+{
+	if (!s) return;
+	if (!IsShapeSelected(s)) {
+		selectedShapes.push_back(s);
+		s->SetSelected(true);
+	}
+}
+
+void Graph::RemoveFromSelection(shape* s)
+{
+	if (!s) return;
+	auto it = std::find(selectedShapes.begin(), selectedShapes.end(), s);
+	if (it != selectedShapes.end()) {
+		(*it)->SetSelected(false);
+		selectedShapes.erase(it);
+	}
+}
+
+void Graph::ClearSelection()
+{
+	for (auto* s : selectedShapes)
+		s->SetSelected(false);
+	selectedShapes.clear();
+}
+
+bool Graph::IsShapeSelected(shape* s) const
+{
+	return std::find(selectedShapes.begin(), selectedShapes.end(), s) != selectedShapes.end();
+}
+
+vector<shape*> Graph::GetSelectedShapes() const
+{
+	return selectedShapes;
+}
+void Graph::SendToBack(shape* s)
+{
+	if (!s) return;
+
+	int index = GetShapeIndex(s);
+	if (index == -1 || index == 0) return; // Already at back or not found
+
+	// Remove shape from current position
+	for (int i = index; i > 0; --i)
+	{
+		shapesList[i] = shapesList[i - 1];
+	}
+
+	// Place shape at index 0
+	shapesList[0] = s;
 }

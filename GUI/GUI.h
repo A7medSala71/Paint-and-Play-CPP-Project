@@ -27,7 +27,7 @@ struct GfxInfo	//Graphical info common for all shapes (you may add more members)
 
 class GUI
 {
-	enum MenuIcon //The icons of the menu (you should add more icons)
+	enum MenuIconHz //The icons of the menu (you should add more icons)
 	{
 		//Note: Icons are ordered here as they appear in menu
 		//If you want to change the menu icons order, change the order here
@@ -46,15 +46,30 @@ class GUI
 		ICON_ChngFillCol,
 		ICON_StickIMG,
 		ICON_ColorPalet,
-
-
+		ICON_ZoomIn,
+		ICON_ZoomOut,
+		ICON_MultiSel,
+		ICON_Save,
+		ICON_Load,
 
 		//TODO: Add more icons names here
 
 		ICON_EXIT,		//Exit icon
 
-		DRAW_ICON_COUNT		//no. of menu icons ==> This should be the last line in this enum
-
+		DRAW_ICON_COUNTHz		//no. of menu icons ==> This should be the last line in this enum
+	};
+	enum MenuIconVer {
+		ICON_ChngBorderCol,
+		ICON_ChngFill,
+		ICON_Del,
+		Icon_Resize,
+		Icon_Rotate,
+		Icon_Copy,
+		Icon_Paste,
+		Icon_Cut,
+		Icon_Multidel,
+		Icon_SendToBack,
+		DRAW_ICON_COUNTVert
 	};
 
 
@@ -93,6 +108,7 @@ public:
 	// Output Functions  ---------------------------
 	window* CreateWind(int, int, int, int) const; //creates the application window
 	void CreateDrawToolBar();	//creates Draw mode toolbar & menu
+	void CreateVerticalToolBar();
 	void CreateStatusBar() const;	//create the status bar
 
 	void ClearStatusBar() const;	//Clears the status bar
@@ -124,6 +140,7 @@ public:
 	int getCrntPenWidth() const;		//get current pen width
 	void SetCrntDrawColor(color c);
 	void SetCrntFillColor(color c);
+	void SetCrntPenWidth(int w);
 	color getBGColor() const;
 
 	bool getIsFilled() const;

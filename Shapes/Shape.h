@@ -23,6 +23,14 @@ public:
 	void ChngDrawClr(color Dclr);	//changes the shape's drawing color
 	void ChngFillClr(color Fclr);	//changes the shape's filling color
 
+	void setBorderColor(const color& newColor);
+	color getBorderColor() const;
+
+	color getFillColor() const;
+	void setFillColor(const color& newColor);
+	bool Isfilled() const;
+	void setIsFilled(bool state);
+
 	void setImagePath(const string& path);
 	string getImagePath() const;
 	///The following functions should be supported by the shape class
@@ -31,13 +39,18 @@ public:
 	///Decide the parameters that you should pass to each function	
 
 
-	//virtual void Rotate() = 0;	//Rotate the shape
-	//virtual void Resize() = 0;	//Resize the shape
-	//virtual void Move() = 0;		//Move the shape
+	virtual void Rotate() = 0;	//Rotate the shape
+	virtual void Resize(double factor) = 0;	//Resize the shape
+	virtual shape* Clone() const = 0;  // Pure virtual function for deep copy
 
-	//virtual void Save(ofstream &OutFile) = 0;	//Save the shape parameters to the file
+	virtual void Move(Point p) = 0;		//Move the shape
+
+	virtual void Save(ofstream &OutFile) = 0;	//Save the shape parameters to the file
 	//virtual void Load(ifstream &Infile) = 0;	//Load the shape parameters to the file
 
 	virtual string GetInfo() const = 0; 	//print all shape info on the status bar
+	virtual void Zoom(double factor, Point ref) = 0;
+	int getID() const;
+	void setID(int newID);
 };
 

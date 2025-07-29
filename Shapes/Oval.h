@@ -14,6 +14,12 @@ public:
 	virtual Point GetCenter() const;
 	virtual int GetHorDiam() const;
 	virtual int GetVertDiam() const;
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
 
 };
 
