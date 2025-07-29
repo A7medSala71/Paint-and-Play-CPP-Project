@@ -12,5 +12,12 @@ public:
 	virtual string GetInfo() const;
 	virtual Point GetStartPoint() const;
 	virtual Point GetEndPoint() const;
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
+
 };
 

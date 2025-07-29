@@ -1,5 +1,5 @@
 #pragma once
-#include "..\CMUgraphicsLib\CMUgraphics.h"
+#include"..\CMUgraphicsLib\CMUgraphics.h"
 class ColorPalette
 {
 public:

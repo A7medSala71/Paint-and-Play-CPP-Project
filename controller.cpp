@@ -12,8 +12,22 @@
 #include"opChangeFillCol.h"
 #include"opStickImage.h"
 #include"operations/opColorPalette.h"
-
-
+#include"opChangeBorderColor.h"
+#include"operations/opChangeFill.h"
+#include"opDeleteShape.h"
+#include"opResize.h"
+#include"operations/opRotate.h"
+#include"opCopy.h"
+#include"opPaste.h"
+#include"opCut.h"
+#include"opZoomIn.h"
+#include"opZoomOut.h"
+#include"opMultiSelect.h"
+#include"opMultiDelete.h"
+#include"opSendToBack.h"
+#include"operations/opSave.h"
+#include"opLoad.h"
+#include"opExit.h"
 //Constructor
 controller::controller()
 {
@@ -78,10 +92,55 @@ operation* controller::createOperation(operationType OpType)
 		case Palette:
 			pOp = new opColorPalette(this);
 			break;
-
-		case EXIT:
-			///create Exitoperation here
+		case ChngBorder:
+			pOp = new opChangeBorderColor(this);
 			break;
+		case ChngFill:
+			pOp = new opChangeFill(this);
+			break;
+		case DEL:
+			pOp = new opDeleteShape(this);
+			break;
+		case RESIZE:
+			pOp = new opResize(this);
+			break;
+		case ROTATE:
+			pOp = new opRotate(this);
+			break;
+		case COPY:
+			pOp = new opCopy(this);
+			break;
+		case Paste:
+			pOp = new opPaste(this);
+			break;
+		case CUT:
+			pOp = new opCut(this);
+			break;
+		case ZoomIn:
+			pOp = new opZoomIn(this);
+			break;
+		case ZoomOut:
+			pOp = new opZoomOut(this);
+			break;
+		case MultiSel:
+			pOp = new opMultiSelect(this);
+			break;
+		case MultiDel:
+			pOp = new opMultiDelete(this);
+			break;
+		case SEND_BACK:
+			pOp = new opSendToBack(this);
+			break;
+		case SAVE:
+			pOp = new opSave(this);
+			break;
+		case LOAD:
+			pOp = new opLoad(this);
+			break;
+		case EXIT:
+			pOp = new opExit(this);
+			break;
+
 		
 		case STATUS:	//a click on the status bar ==> no operation
 			break;
@@ -98,6 +157,7 @@ operation* controller::createOperation(operationType OpType)
 void controller::UpdateInterface() const
 {	
 	pGraph->Draw(pGUI);
+	pGUI->CreateVerticalToolBar();
 }
 void controller::Undo()
 {
@@ -120,6 +180,14 @@ void controller::Redo()
 		op->Redo();
 		Undo_Stack.push(op);
 	}
+}
+void controller::setClipboardShape(shape* s)
+{
+	clipboardShape = s;
+}
+shape* controller::getClipboardShape() const
+{
+	return clipboardShape;
 }
 ////////////////////////////////////////////////////////////////////////////////////
 //Return a pointer to the UI
@@ -180,7 +248,6 @@ void controller::Run()
 
 		//4. Update the interface
 		UpdateInterface();
-
 	} while (OpType != EXIT);
 
 }

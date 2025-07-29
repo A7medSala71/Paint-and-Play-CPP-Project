@@ -1,6 +1,7 @@
 #include "Rect.h"
 #include"../GUI/GUI.h"
 #include<iostream>
+#include<fstream>
 using namespace std;
 Rect::Rect(Point P1, Point P2, GfxInfo shapeGfxInfo):shape(shapeGfxInfo)
 {
@@ -47,4 +48,74 @@ Point Rect::getCorner1() const
 Point Rect::getCorner2() const
 {
     return Corner2;
+}
+
+void Rect::Resize(double factor)
+{
+    Point center = { (Corner1.x + Corner2.x) / 2, (Corner1.y + Corner2.y) / 2 };
+    Corner1.x = center.x + (Corner1.x - center.x) * factor;
+    Corner1.y = center.y + (Corner1.y - center.y) * factor;
+    Corner2.x = center.x + (Corner2.x - center.x) * factor;
+    Corner2.y = center.y + (Corner2.y - center.y) * factor;
+}
+
+void Rect::Rotate()
+{
+    int cx = (Corner1.x + Corner2.x) / 2;
+    int cy = (Corner1.y + Corner2.y) / 2;
+
+    // Rotate corners
+    int dx1 = Corner1.x - cx;
+    int dy1 = Corner1.y - cy;
+    int dx2 = Corner2.x - cx;
+    int dy2 = Corner2.y - cy;
+
+    Corner1.x = cx - dy1;
+    Corner1.y = cy + dx1;
+
+    Corner2.x = cx - dy2;
+    Corner2.y = cy + dx2;
+}
+
+shape* Rect::Clone() const
+{
+    return new Rect(*this);
+}
+
+void Rect::Move(Point p)
+{
+    Point c;
+    c.x = (Corner1.x + Corner2.x) / 2;
+    c.y = (Corner1.y + Corner2.y) / 2;
+
+    int dx = p.x - c.x;
+    int dy = p.y - c.y;
+
+    Corner1.x += dx; Corner1.y += dy;
+    Corner2.x += dx; Corner2.y += dy;
+}
+void Rect::Zoom(double factor, Point ref)
+{
+    Corner1.x = ref.x + (int)((Corner1.x - ref.x) * factor);
+    Corner1.y = ref.y + (int)((Corner1.y - ref.y) * factor);
+    Corner2.x = ref.x + (int)((Corner2.x - ref.x) * factor);
+    Corner2.y = ref.y + (int)((Corner2.y - ref.y) * factor);
+}
+void Rect::Save(ofstream& OutFile)
+{
+    OutFile << "RECT " << getID() << " "
+        << Corner1.x << " " << Corner1.y << " "
+        << Corner2.x << " " << Corner2.y << " "
+        << (int)ShpGfxInfo.DrawClr.ucRed << " "
+        << (int)ShpGfxInfo.DrawClr.ucGreen << " "
+        << (int)ShpGfxInfo.DrawClr.ucBlue << " ";
+
+    if (ShpGfxInfo.isFilled)
+        OutFile << (int)ShpGfxInfo.FillClr.ucRed << " "
+        << (int)ShpGfxInfo.FillClr.ucGreen << " "
+        << (int)ShpGfxInfo.FillClr.ucBlue << " ";
+    else
+        OutFile << "NO_FILL ";
+
+    OutFile << ShpGfxInfo.BorderWdth << "\n";
 }

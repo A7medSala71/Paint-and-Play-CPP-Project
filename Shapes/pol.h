@@ -16,6 +16,13 @@ public:
 	virtual void Draw(GUI* pUI) const;
 	virtual string GetInfo() const;
 	vector<Point> GetVertices() const;
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
+
 };
 
 bool isPointInPolygon(const vector<Point>& poly, Point p);

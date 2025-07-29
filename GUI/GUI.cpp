@@ -3,15 +3,15 @@
 GUI::GUI()
 {
 
-	width = 1300;
-	height = 700;
+	width = 1700;
+	height = 800;
 	wx = 5;
 	wy = 5;
 
 
 	StatusBarHeight = 50;
 	ToolBarHeight = 50;
-	MenuIconWidth = 80;
+	MenuIconWidth = 70;
 
 	DrawColor = DARKGREEN;	//default Drawing color
 	FillColor = WHITE;	//default Filling color
@@ -71,17 +71,11 @@ string GUI::GetSrting() const
 operationType GUI::GetUseroperation() const
 {
 	int x, y;
-	pWind->WaitMouseClick(x, y);	//Get the coordinates of the user click
+	pWind->WaitMouseClick(x, y);
 
-	//[1] If user clicks on the Toolbar
-	if (y >= 0 && y < ToolBarHeight)
-	{
-		//Check whick Menu icon was clicked
-		//==> This assumes that menu icons are lined up horizontally <==
+	// ---------- Horizontal Toolbar ----------
+	if (y >= 0 && y < ToolBarHeight) {
 		int ClickedIconOrder = (x / MenuIconWidth);
-		//Divide x coord of the point clicked by the menu icon width (int division)
-		//if division result is 0 ==> first icon is clicked, if 1 ==> 2nd icon and so on
-
 		switch (ClickedIconOrder)
 		{
 		case ICON_RECT: return DRAW_RECT;
@@ -99,23 +93,46 @@ operationType GUI::GetUseroperation() const
 		case ICON_ChngFillCol: return CHNG_FILL_CLR;
 		case ICON_StickIMG: return STICK_IMG;
 		case ICON_ColorPalet: return Palette;
-
+		case ICON_ZoomIn: return ZoomIn;
+		case ICON_ZoomOut: return ZoomOut;
+		case ICON_MultiSel: return MultiSel;
+		case ICON_Save: return SAVE;
+		case ICON_Load: return LOAD;
 		case ICON_EXIT: return EXIT;
 
-		default: return EMPTY;	//A click on empty place in desgin toolbar
+
+		default: return EMPTY;
 		}
 	}
 
-	//[2] User clicks on the drawing area
-	if (y >= ToolBarHeight && y < height - StatusBarHeight)
+	// ---------- Vertical Toolbar ----------
+	if (x >= 0 && x < MenuIconWidth &&
+		y >= ToolBarHeight && y < ToolBarHeight + DRAW_ICON_COUNTVert * MenuIconWidth)
 	{
-		return DRAWING_AREA;
+		int ClickedIconOrder = (y - ToolBarHeight) / MenuIconWidth;
+		switch (ClickedIconOrder)
+		{
+		case ICON_ChngBorderCol: return ChngBorder;   
+		case ICON_ChngFill: return ChngFill;   
+		case ICON_Del: return DEL;   
+		case Icon_Resize: return RESIZE; 
+		case Icon_Rotate: return ROTATE;
+		case Icon_Copy: return COPY;
+		case Icon_Paste: return Paste;
+		case Icon_Cut: return CUT;
+		case Icon_Multidel: return MultiDel;
+		case Icon_SendToBack: return SEND_BACK;
+
+		default: return EMPTY;
+		}
 	}
 
-	//[3] User clicks on the status bar
-	return STATUS;
-	
+	// ---------- Drawing Area ----------
+	if (y >= ToolBarHeight && y < height - StatusBarHeight && x >= MenuIconWidth)
+		return DRAWING_AREA;
 
+	// ---------- Status Bar ----------
+	return STATUS;
 }
 ////////////////////////////////////////////////////
 
@@ -149,47 +166,59 @@ void GUI::ClearStatusBar() const
 	pWind->DrawRectangle(0, height - StatusBarHeight, width, height);
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-void GUI::CreateDrawToolBar() 
+void GUI::CreateDrawToolBar()
 {
+	// ---------- Horizontal Toolbar ----------
+	string MenuIconImagesHz[DRAW_ICON_COUNTHz];
+	MenuIconImagesHz[ICON_RECT] = "images\\MenuIcons\\Menu_Rect.jpg";
+	MenuIconImagesHz[ICON_TRI] = "images\\MenuIcons\\Menu_Tri.jpg";
+	MenuIconImagesHz[ICON_Line] = "images\\MenuIcons\\Menu_Line.jpeg";
+	MenuIconImagesHz[ICON_Sqr] = "images\\MenuIcons\\Menu_Sqr.jpeg";
+	MenuIconImagesHz[ICON_Circ] = "images\\MenuIcons\\Menu_Circ.jpeg";
+	MenuIconImagesHz[ICON_Oval] = "images\\MenuIcons\\Menu_Oval.jpeg";
+	MenuIconImagesHz[ICON_RegPol] = "images\\MenuIcons\\Menu_RegPol.jpeg";
+	MenuIconImagesHz[ICON_Pol] = "images\\MenuIcons\\Menu_Pol.jpeg";
+	MenuIconImagesHz[ICON_Undo] = "images\\MenuIcons\\Menu_Undo.jpeg";
+	MenuIconImagesHz[ICON_Redo] = "images\\MenuIcons\\Menu_Redo.jpeg";
+	MenuIconImagesHz[ICON_Select] = "images\\MenuIcons\\Menu_Select.jpeg";
+	MenuIconImagesHz[ICON_ChngPenCol] = "images\\MenuIcons\\Menu_ChgPenCol.jpeg";
+	MenuIconImagesHz[ICON_ChngFillCol] = "images\\MenuIcons\\Menu_Fill.jpeg";
+	MenuIconImagesHz[ICON_StickIMG] = "images\\MenuIcons\\Menu_StickIMG.jpeg";
+	MenuIconImagesHz[ICON_ColorPalet] = "images\\MenuIcons\\Menu_ColPalet.jpeg";
+	MenuIconImagesHz[ICON_ZoomIn] = "images\\MenuIcons\\Menu_ZoomIn.jpeg";
+	MenuIconImagesHz[ICON_ZoomOut] = "images\\MenuIcons\\Menu_ZoomOut.jpeg";
+	MenuIconImagesHz[ICON_MultiSel] = "images\\MenuIcons\\Menu_MultiSel.jpeg";
+	MenuIconImagesHz[ICON_Save] = "images\\MenuIcons\\Menu_Save.jpeg";
+	MenuIconImagesHz[ICON_Load] = "images\\MenuIcons\\Menu_Load.jpeg";
 
-	//You can draw the tool bar icons in any way you want.
-	//Below is one possible way
+	MenuIconImagesHz[ICON_EXIT] = "images\\MenuIcons\\Menu_Exit.jpg";
 
-	//First prepare List of images for each menu icon
-	//To control the order of these images in the menu, 
-	//reoder them in UI_Info.h ==> enum DrawMenuIcon
-	string MenuIconImages[DRAW_ICON_COUNT];
-	MenuIconImages[ICON_RECT] = "images\\MenuIcons\\Menu_Rect.jpg";
-	MenuIconImages[ICON_TRI] = "images\\MenuIcons\\Menu_Tri.jpg";
-	MenuIconImages[ICON_Line] = "images\\MenuIcons\\Menu_Line.jpeg";
-	MenuIconImages[ICON_Sqr] = "images\\MenuIcons\\Menu_Sqr.jpeg";
-	MenuIconImages[ICON_Circ] = "images\\MenuIcons\\Menu_Circ.jpeg";
-	MenuIconImages[ICON_Oval] = "images\\MenuIcons\\Menu_Oval.jpeg";
-	MenuIconImages[ICON_RegPol] = "images\\MenuIcons\\Menu_RegPol.jpeg";
-	MenuIconImages[ICON_Pol] = "images\\MenuIcons\\Menu_Pol.jpeg";
-	MenuIconImages[ICON_Undo] = "images\\MenuIcons\\Menu_Undo.jpeg";
-	MenuIconImages[ICON_Redo] = "images\\MenuIcons\\Menu_Redo.jpeg";
-	MenuIconImages[ICON_Select] = "images\\MenuIcons\\Menu_Select.jpeg";
-	MenuIconImages[ICON_ChngPenCol] = "images\\MenuIcons\\Menu_ChgPenCol.jpeg";
-	MenuIconImages[ICON_ChngFillCol] = "images\\MenuIcons\\Menu_Fill.jpeg";
-	MenuIconImages[ICON_StickIMG] = "images\\MenuIcons\\Menu_StickIMG.jpeg";
-	MenuIconImages[ICON_ColorPalet] = "images\\MenuIcons\\Menu_ColPalet.jpeg";
+	for (int i = 0; i < DRAW_ICON_COUNTHz; i++)
+		pWind->DrawImage(MenuIconImagesHz[i], i * MenuIconWidth, 0, MenuIconWidth, ToolBarHeight);
 
-
-	MenuIconImages[ICON_EXIT] = "images\\MenuIcons\\Menu_Exit.jpg";
-
-	//TODO: Prepare images for each menu icon and add it to the list
-
-	//Draw menu icon one image at a time
-	for (int i = 0; i < DRAW_ICON_COUNT; i++)
-		pWind->DrawImage(MenuIconImages[i], i * MenuIconWidth, 0, MenuIconWidth, ToolBarHeight);
-
-
-
-	//Draw a line under the toolbar
 	pWind->SetPen(RED, 3);
 	pWind->DrawLine(0, ToolBarHeight, width, ToolBarHeight);
+}
+void GUI::CreateVerticalToolBar()
+{
+	// ---------- Vertical Toolbar ----------
+	string MenuIconImagesVer[DRAW_ICON_COUNTVert];
+	MenuIconImagesVer[ICON_ChngBorderCol] = "images\\MenuIcons\\Menu_ChngBorder.jpeg";
+	MenuIconImagesVer[ICON_ChngFill] = "images\\MenuIcons\\Menu_ChngFill.jpeg";
+	MenuIconImagesVer[ICON_Del] = "images\\MenuIcons\\Menu_Delete.jpeg";
+	MenuIconImagesVer[Icon_Resize] = "images\\MenuIcons\\Menu_Resize.jpeg";
+	MenuIconImagesVer[Icon_Rotate] = "images\\MenuIcons\\Menu_Rotate.jpeg";
+	MenuIconImagesVer[Icon_Copy] = "images\\MenuIcons\\Menu_Copy.jpeg";
+	MenuIconImagesVer[Icon_Paste] = "images\\MenuIcons\\Menu_Paste.jpeg";
+	MenuIconImagesVer[Icon_Cut] = "images\\MenuIcons\\Menu_Cut.jpeg";
+	MenuIconImagesVer[Icon_Multidel] = "images\\MenuIcons\\Menu_MultiDel.jpeg";
+	MenuIconImagesVer[Icon_SendToBack] = "images\\MenuIcons\\Menu_SendToBack.jpeg";
 
+	for (int i = 0; i < DRAW_ICON_COUNTVert; i++)
+		pWind->DrawImage(MenuIconImagesVer[i], 0, ToolBarHeight + i * MenuIconWidth, MenuIconWidth, MenuIconWidth);
+
+	pWind->SetPen(RED, 3);
+	pWind->DrawLine(MenuIconWidth, ToolBarHeight, MenuIconWidth, height - StatusBarHeight);
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -245,6 +274,11 @@ void GUI::SetCrntFillColor(color c)
 	FillColor = c;
 }
 
+void GUI::SetCrntPenWidth(int w)
+{
+	PenWidth = w;
+}
+
 color GUI::getBGColor() const
 {
 	return BkGrndColor;
@@ -295,11 +329,6 @@ void GUI::DrawRect(Point P1, Point P2, GfxInfo RectGfxInfo) const
 		style = FRAME;
 
 	pWind->DrawRectangle(P1.x, P1.y, P2.x, P2.y, style);
-
-	if (RectGfxInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = RectGfxInfo.DrawClr;
 }
 
 void GUI::DrawLine(Point P1, Point P2, GfxInfo LineGfxInfo) const
@@ -314,10 +343,6 @@ void GUI::DrawLine(Point P1, Point P2, GfxInfo LineGfxInfo) const
 
 	pWind->DrawLine(P1.x, P1.y, P2.x, P2.y);
 
-	if (LineGfxInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = LineGfxInfo.DrawClr;
 }
 
 void GUI::DrawTri(Point P1, Point P2, Point P3, GfxInfo TriGfxInfo) const
@@ -341,11 +366,6 @@ void GUI::DrawTri(Point P1, Point P2, Point P3, GfxInfo TriGfxInfo) const
 
 	pWind->DrawTriangle(P1.x, P1.y, P2.x, P2.y, P3.x, P3.y, style);
 
-
-	if (TriGfxInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = TriGfxInfo.DrawClr;
 }
 
 void GUI::DrawSquare(Point center, int length, GfxInfo SquareGfxInfo) const
@@ -371,10 +391,6 @@ void GUI::DrawSquare(Point center, int length, GfxInfo SquareGfxInfo) const
 
 	pWind->DrawRectangle(P1.x, P1.y, P2.x, P2.y, style);
 
-	if (SquareGfxInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = SquareGfxInfo.DrawClr;
 
 }
 void GUI::DrawCircle(Point center, int radius, GfxInfo CircleInfo) const
@@ -397,10 +413,6 @@ void GUI::DrawCircle(Point center, int radius, GfxInfo CircleInfo) const
 		style = FRAME;
 	pWind->DrawCircle(center.x,center.y,radius, style);
 
-	if (CircleInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = CircleInfo.DrawClr;
 }
 void GUI::DrawOval(Point center, int Horizontal_diam, int Vert_diam, GfxInfo OvalInfo) const
 {
@@ -426,11 +438,6 @@ void GUI::DrawOval(Point center, int Horizontal_diam, int Vert_diam, GfxInfo Ova
 	pWind->DrawEllipse(P1.x, P1.y, P2.x, P2.y, style);
 	
 
-
-	if (OvalInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = OvalInfo.DrawClr;
 }
 void GUI::DrawPol(int numofvert, int* arr_x, int*arr_y, GfxInfo PolInfo) const
 {
@@ -453,10 +460,6 @@ void GUI::DrawPol(int numofvert, int* arr_x, int*arr_y, GfxInfo PolInfo) const
 
 	pWind->DrawPolygon(arr_x,arr_y,numofvert,style);
 
-	if (PolInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = PolInfo.DrawClr;
 }
 void GUI::DrawRegPol(int numofvert, int* arr_x, int* arr_y, GfxInfo RegPolInfo) const
 {
@@ -478,11 +481,6 @@ void GUI::DrawRegPol(int numofvert, int* arr_x, int* arr_y, GfxInfo RegPolInfo) 
 		style = FRAME;
 
 	pWind->DrawPolygon(arr_x, arr_y, numofvert, style);
-
-	if (RegPolInfo.isSelected)
-		DrawingClr = HighlightColor;
-	else
-		DrawingClr = RegPolInfo.DrawClr;
 	
 }
 //////////////////////////////////////////////////////////////////////////////////////////

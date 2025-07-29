@@ -44,7 +44,6 @@ void opAddCircle::Execute()
 
 	//Create a rectangle with the above parameters
 	pCirc = new Circle(Center, radius, CircleGfxInfo);
-
 	Graph* pGr = pControl->getGraph();
 
 	pGr->Addshape(pCirc);

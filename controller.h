@@ -2,6 +2,7 @@
 
 #include "DEFS.h"
 #include "Shapes\Graph.h"
+#include "Shapes\Shape.h"
 #include "GUI\GUI.h"
 #include<stack>
 #include<iostream>
@@ -14,6 +15,7 @@ class controller
 {
 	Graph* pGraph;	//pointe to the grapg
 	GUI* pGUI;		//Pointer to UI class
+	shape* clipboardShape = nullptr;
 	stack<operation*> Undo_Stack;
 	stack<operation*> Redo_Stack;
 public:	
@@ -33,5 +35,7 @@ public:
 	void UpdateInterface() const;	//Redraws all the drawing window	
 	void Undo();
 	void Redo();
+	void setClipboardShape(shape* s);
+	shape* getClipboardShape() const;
 };
 

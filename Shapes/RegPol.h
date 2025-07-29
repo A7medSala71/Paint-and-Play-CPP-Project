@@ -8,7 +8,7 @@ private:
 	int* array_y;
 	Point Center;
 	double radius;
-
+	double angleOffset;
 public:
 	RegPol(Point center, Point radPT, int NOV, GfxInfo RegPolGfxInfo);
 	virtual ~RegPol();
@@ -16,7 +16,12 @@ public:
 	virtual string GetInfo() const;
 	virtual Point Getcenter() const;
 	virtual double GetRad() const;
-
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
 
 };
 

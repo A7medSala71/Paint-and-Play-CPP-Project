@@ -13,6 +13,12 @@ public:
 	virtual string GetInfo() const;
 	virtual Point getcenter()const;
 	virtual int getrad()const;
-
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
+	bool isinside(Point p);
 };
 

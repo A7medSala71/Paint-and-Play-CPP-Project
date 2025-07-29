@@ -14,5 +14,11 @@ public:
 	virtual string GetInfo() const;
 	Point getCorner1() const;
 	Point getCorner2() const;
+	void Resize(double factor) override;
+	void Rotate()override;
+	shape* Clone() const override;
+	void Move(Point p);
+	void Zoom(double factor, Point ref);
+	virtual void Save(ofstream& OutFile);
 };
 
