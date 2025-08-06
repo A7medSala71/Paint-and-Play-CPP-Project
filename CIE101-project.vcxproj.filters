@@ -225,6 +225,7 @@
     <ClCompile Include="opSave.cpp" />
     <ClCompile Include="opLoad.cpp" />
     <ClCompile Include="opExit.cpp" />
+    <ClCompile Include="opResizeDrag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller.h" />
@@ -410,6 +411,7 @@
     <ClInclude Include="operations\opSave.h" />
     <ClInclude Include="opLoad.h" />
     <ClInclude Include="opExit.h" />
+    <ClInclude Include="opResizeDrag.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Operations">

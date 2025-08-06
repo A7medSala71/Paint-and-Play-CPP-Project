@@ -28,6 +28,7 @@
 #include"operations/opSave.h"
 #include"opLoad.h"
 #include"opExit.h"
+#include"opResizeDrag.h"
 //Constructor
 controller::controller()
 {
@@ -136,6 +137,9 @@ operation* controller::createOperation(operationType OpType)
 			break;
 		case LOAD:
 			pOp = new opLoad(this);
+			break;
+		case RES_BY_DRAG:
+			pOp = new opResizeDrag(this);
 			break;
 		case EXIT:
 			pOp = new opExit(this);

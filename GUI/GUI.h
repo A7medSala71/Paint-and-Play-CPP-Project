@@ -51,6 +51,7 @@ class GUI
 		ICON_MultiSel,
 		ICON_Save,
 		ICON_Load,
+		ICON_RES_DRAG,
 
 		//TODO: Add more icons names here
 
@@ -151,6 +152,7 @@ public:
 
 	void setIsFilled(bool filled);
 
+	void GetMouseState(int& x, int& y, bool& isPressed);
 
 	~GUI();
 };

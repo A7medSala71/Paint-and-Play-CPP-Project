@@ -35,6 +35,7 @@ enum operationType //The operations supported (you can add more if needed)
 	SEND_BACK,		//Send a shape to the back of all shapes
 	SAVE,			//Save the whole graph to a file
 	LOAD,			//Load a graph from a file
+	RES_BY_DRAG,
 	EXIT,			//Exit the application
 	CHNG_BK_CLR,	//Change background color
 	MOVE,			//Move a shape(s)

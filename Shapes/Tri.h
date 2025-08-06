@@ -14,11 +14,11 @@ public:
 	virtual Point GetPoint1() const;
 	virtual Point GetPoint2() const;
 	virtual Point GetPoint3() const;
-	void Resize(double factor) override;
-	void Rotate()override;
-	shape* Clone() const override;
-	void Move(Point p);
-	void Zoom(double factor, Point ref);
+	virtual void Resize(double factor)override;
+	virtual void Rotate()override;
+	virtual shape* Clone() const override;
+	virtual void Move(Point p);
+	virtual void Zoom(double factor, Point ref);
 	virtual void Save(ofstream& OutFile);
 };
 
