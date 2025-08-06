@@ -98,6 +98,7 @@ operationType GUI::GetUseroperation() const
 		case ICON_MultiSel: return MultiSel;
 		case ICON_Save: return SAVE;
 		case ICON_Load: return LOAD;
+		case ICON_RES_DRAG: return RES_BY_DRAG;
 		case ICON_EXIT: return EXIT;
 
 
@@ -190,6 +191,7 @@ void GUI::CreateDrawToolBar()
 	MenuIconImagesHz[ICON_MultiSel] = "images\\MenuIcons\\Menu_MultiSel.jpeg";
 	MenuIconImagesHz[ICON_Save] = "images\\MenuIcons\\Menu_Save.jpeg";
 	MenuIconImagesHz[ICON_Load] = "images\\MenuIcons\\Menu_Load.jpeg";
+	MenuIconImagesHz[ICON_RES_DRAG] = "images\\MenuIcons\\Menu_RES_DRAG.jpeg";
 
 	MenuIconImagesHz[ICON_EXIT] = "images\\MenuIcons\\Menu_Exit.jpg";
 
@@ -303,6 +305,14 @@ void GUI::setIsFilled(bool filled)
 {
 	IsFilled = filled;
 }
+
+void GUI::GetMouseState(int& x, int& y, bool& isPressed)
+{
+	buttonstate btnState = pWind->GetButtonState(LEFT_BUTTON, x, y);
+	isPressed = (btnState == BUTTON_DOWN);
+}
+
+
 
 
 //======================================================================================//

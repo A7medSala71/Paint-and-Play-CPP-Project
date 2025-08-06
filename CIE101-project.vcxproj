@@ -190,6 +190,7 @@
     <ClCompile Include="opMultiSelect.cpp" />
     <ClCompile Include="opPaste.cpp" />
     <ClCompile Include="opResize.cpp" />
+    <ClCompile Include="opResizeDrag.cpp" />
     <ClCompile Include="opRotate.cpp" />
     <ClCompile Include="opSave.cpp" />
     <ClCompile Include="opSelect.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="opMultiSelect.h" />
     <ClInclude Include="opPaste.h" />
     <ClInclude Include="opResize.h" />
+    <ClInclude Include="opResizeDrag.h" />
     <ClInclude Include="opSendToBack.h" />
     <ClInclude Include="opStickImage.h" />
     <ClInclude Include="opZoomIn.h" />

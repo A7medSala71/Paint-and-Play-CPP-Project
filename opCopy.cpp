@@ -19,7 +19,7 @@ void opCopy::Execute()
         pUI->PrintMessage("No shape selected to copy");
         return;
     }
-
+    
     // store in clipboard
     pControl->setClipboardShape(selected);
     pUI->PrintMessage("Shape copied to clipboard");
